@@ -35,7 +35,7 @@ public class LineBasedFrameDecoderTest {
         assertEquals("first", releaseLater((ByteBuf) ch.readInbound()).toString(CharsetUtil.US_ASCII));
         assertEquals("second", releaseLater((ByteBuf) ch.readInbound()).toString(CharsetUtil.US_ASCII));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
 
         ReferenceCountUtil.release(ch.readInbound());
     }
@@ -48,7 +48,7 @@ public class LineBasedFrameDecoderTest {
         assertEquals("first\r\n", releaseLater((ByteBuf) ch.readInbound()).toString(CharsetUtil.US_ASCII));
         assertEquals("second\n", releaseLater((ByteBuf) ch.readInbound()).toString(CharsetUtil.US_ASCII));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
         ReferenceCountUtil.release(ch.readInbound());
     }
 
@@ -66,7 +66,6 @@ public class LineBasedFrameDecoderTest {
         assertThat(releaseLater((ByteBuf) ch.readInbound()),
                 is(releaseLater(copiedBuffer("first\n", CharsetUtil.US_ASCII))));
         assertThat(ch.finish(), is(false));
-        ch.close();
     }
 
     @Test
@@ -84,7 +83,6 @@ public class LineBasedFrameDecoderTest {
         assertThat(releaseLater((ByteBuf) ch.readInbound()),
                 is(releaseLater(copiedBuffer("first\r\n", CharsetUtil.US_ASCII))));
         assertThat(ch.finish(), is(false));
-        ch.close();
     }
 
     @Test
@@ -103,6 +101,5 @@ public class LineBasedFrameDecoderTest {
         assertThat(releaseLater((ByteBuf) ch.readInbound()),
                 is(releaseLater(copiedBuffer("first\r\n", CharsetUtil.US_ASCII))));
         assertThat(ch.finish(), is(false));
-        ch.close();
     }
 }

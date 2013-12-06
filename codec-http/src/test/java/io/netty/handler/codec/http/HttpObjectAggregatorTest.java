@@ -135,6 +135,7 @@ public class HttpObjectAggregatorTest {
         }
         assertFalse(embedder.writeInbound(chunk3.copy()));
         assertFalse(embedder.writeInbound(chunk4.copy()));
+        embedder.finish();
     }
 
     @Test(expected = IllegalArgumentException.class)

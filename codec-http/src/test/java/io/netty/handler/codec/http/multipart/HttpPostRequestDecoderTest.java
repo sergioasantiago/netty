@@ -90,6 +90,8 @@ public class HttpPostRequestDecoderTest {
             // Validate data has been parsed correctly as it was passed into request.
             assertEquals("Invalid decoded data [data=" + data.replaceAll("\r", "\\\\r") + ", upload=" + upload + ']',
                 data, upload.getString(CharsetUtil.UTF_8));
+            upload.release();
+            decoder.destroy();
         }
     }
 
@@ -122,6 +124,7 @@ public class HttpPostRequestDecoderTest {
         // Create decoder instance to test.
         final HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(inMemoryFactory, req);
         assertFalse(decoder.getBodyHttpDatas().isEmpty());
+        decoder.destroy();
     }
 
     // See https://github.com/netty/netty/issues/1848
@@ -174,11 +177,12 @@ public class HttpPostRequestDecoderTest {
         assertTrue("Should have a piece of data", aDecoder.hasNext());
 
         InterfaceHttpData aDecodedData = aDecoder.next();
-
         assertEquals(InterfaceHttpData.HttpDataType.Attribute, aDecodedData.getHttpDataType());
 
         Attribute aAttr = (Attribute) aDecodedData;
-
         assertEquals(aData, aAttr.getValue());
+
+        aDecodedData.release();
+        aDecoder.destroy();
     }
 }

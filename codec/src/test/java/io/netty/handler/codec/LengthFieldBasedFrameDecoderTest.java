@@ -50,6 +50,7 @@ public class LengthFieldBasedFrameDecoderTest {
         b.release();
 
         Assert.assertNull(channel.readInbound());
+        channel.finish();
     }
 
     @Test
@@ -79,5 +80,6 @@ public class LengthFieldBasedFrameDecoderTest {
         b.release();
 
         Assert.assertNull(channel.readInbound());
+        channel.finish();
     }
 }

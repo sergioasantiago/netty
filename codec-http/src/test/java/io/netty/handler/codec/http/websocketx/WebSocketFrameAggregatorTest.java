@@ -34,7 +34,7 @@ public class WebSocketFrameAggregatorTest {
             Unpooled.copiedBuffer("Content3", CharsetUtil.UTF_8));
     private final ByteBuf aggregatedContent = ReferenceCountUtil.releaseLater(
             Unpooled.buffer().writeBytes(content1.duplicate())
-            .writeBytes(content2.duplicate()).writeBytes(content3.duplicate()));
+                    .writeBytes(content2.duplicate()).writeBytes(content3.duplicate()));
     @Test
     public void testAggregationBinary() {
         EmbeddedChannel channel = new EmbeddedChannel(new WebSocketFrameAggregator(Integer.MAX_VALUE));
@@ -89,7 +89,7 @@ public class WebSocketFrameAggregatorTest {
         TextWebSocketFrame frame = (TextWebSocketFrame) channel.readInbound();
         Assert.assertTrue(frame.isFinalFragment());
         Assert.assertEquals(1, frame.rsv());
-        Assert.assertEquals(content1.duplicate(), frame.content());
+        Assert.assertEquals(content1, frame.content());
         frame.release();
 
         PingWebSocketFrame frame2 = (PingWebSocketFrame) channel.readInbound();
@@ -114,7 +114,7 @@ public class WebSocketFrameAggregatorTest {
     }
 
     @Test
-    public void textFrameTooBig() {
+    public void textFrameTooBig() throws Exception {
         EmbeddedChannel channel = new EmbeddedChannel(new WebSocketFrameAggregator(8));
         channel.writeInbound(new BinaryWebSocketFrame(true, 1, content1.copy()));
         channel.writeInbound(new BinaryWebSocketFrame(false, 0, content1.copy()));
@@ -137,7 +137,6 @@ public class WebSocketFrameAggregatorTest {
         }
         channel.writeInbound(new ContinuationWebSocketFrame(false, 0, content2.copy()));
         channel.writeInbound(new ContinuationWebSocketFrame(true, 0, content2.copy()));
-
         for (;;) {
             Object msg = channel.readInbound();
             if (msg == null) {
@@ -145,5 +144,6 @@ public class WebSocketFrameAggregatorTest {
             }
             ReferenceCountUtil.release(msg);
         }
+        channel.finish();
     }
 }

@@ -164,6 +164,7 @@ public class WebSocketServerProtocolHandlerTest {
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             assertNull(content);
             content = "processed: " + ((TextWebSocketFrame) msg).text();
+            ReferenceCountUtil.release(msg);
         }
 
         String getContent() {

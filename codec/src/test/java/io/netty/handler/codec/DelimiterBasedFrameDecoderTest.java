@@ -37,7 +37,7 @@ public class DelimiterBasedFrameDecoderTest {
         assertEquals("TestLine", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertEquals("g", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
     }
 
     @Test
@@ -50,7 +50,7 @@ public class DelimiterBasedFrameDecoderTest {
         assertEquals("TestLine", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertEquals("g", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
     }
 
     @Test
@@ -61,7 +61,7 @@ public class DelimiterBasedFrameDecoderTest {
         assertEquals("TestLine\r\n", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertEquals("g\r\n", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
     }
 
     @Test
@@ -74,7 +74,7 @@ public class DelimiterBasedFrameDecoderTest {
         assertEquals("TestLine\r\n", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertEquals("g\r\n", releaseLater((ByteBuf) ch.readInbound()).toString(Charset.defaultCharset()));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
     }
 
     @Test
@@ -86,9 +86,8 @@ public class DelimiterBasedFrameDecoderTest {
         assertEquals("first", releaseLater((ByteBuf) ch.readInbound()).toString(CharsetUtil.US_ASCII));
         assertEquals("second", releaseLater((ByteBuf) ch.readInbound()).toString(CharsetUtil.US_ASCII));
         assertNull(ch.readInbound());
-        ch.close();
+        ch.finish();
 
-        System.out.println(ch.readInbound());
         ReferenceCountUtil.release(ch.readInbound());
     }
 }
